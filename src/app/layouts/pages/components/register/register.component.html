@@ -1,0 +1,97 @@
+<div class="wrapper">
+    <div class="register">
+        <div class="register-content bg-white" [formGroup]="myForm">
+            <div class="reg-head">
+                <span class="title">Formulario de Registro</span>
+            </div>
+            <div class="reg-content p-2">
+                <div class="text-group px-1">
+                    <span class="mb-1 font-12 font-weight-bold">ID</span>
+                    <input type="text"
+                           class="text-form"
+                           [ngClass]="{'error-field': (myForm.get('id')?.errors && (myForm.get('id')?.touched || formSubmitted)) }"
+                           formControlName="id">
+                    @if (myForm.get('id')?.errors && (myForm.get('id')?.touched || formSubmitted)) {
+                        <small class="text-error mt-1">ID no válido</small>
+                    }
+                </div>
+                <div class="text-group px-1">
+                    <span class="mb-1 font-12 font-weight-bold">Nombre</span>
+                    <input type="text"
+                           class="text-form"
+                           [ngClass]="{'error-field': formSubmitted && myForm.get('name')?.errors}"
+                           formControlName="name">
+                    @if (formSubmitted && myForm.get('name')?.errors) {
+                        <small class="text-error mt-1">Nombre no válido</small>
+                    }
+                </div>
+                <div class="text-group px-1">
+                    <span class="mb-1 font-12 font-weight-bold">Descripción</span>
+                    <input type="text"
+                           class="text-form"
+                           [ngClass]="{'error-field': formSubmitted && myForm.get('description')?.errors}"
+                           formControlName="description">
+                    @if (formSubmitted && myForm.get('description')?.errors) {
+                        <small class="text-error mt-1">Descripción no válida</small>
+                    }
+                </div>
+                <div class="text-group px-1">
+                    <span class="mb-1 font-12 font-weight-bold">Logo</span>
+                    <input type="text"
+                           class="text-form"
+                           [ngClass]="{'error-field': formSubmitted && myForm.get('logo')?.errors}"
+                           formControlName="logo">
+                    @if (formSubmitted && myForm.get('logo')?.errors) {
+                        <small class="text-error mt-1">Logo es requerido</small>
+                    }
+                </div>
+                <div class="text-group px-1">
+                    <span class="mb-1 font-12 font-weight-bold">Fecha Liberación</span>
+                    <input type="date"
+                           class="text-form"
+                           placeholder="aaaa-mm-dd"
+                           [ngClass]="{'error-field': formSubmitted && (
+                                                                    myForm.get('date_release')?.errors ||
+                                                                    myForm.get('date_release')?.errors?.['invalidDate'])}"
+                           formControlName="date_release">
+                    @if (formSubmitted && (myForm.get('date_release')?.errors || myForm.get('date_release')?.errors?.['invalidDate'])) {
+                        <small class="text-error mt-1">Fecha de liberación es requerida</small>
+                    }
+                </div>
+                <div class="text-group px-1">
+                    <span class="mb-1 font-12 font-weight-bold">Fecha Revisión</span>
+                    <input type="date"
+                           class="text-form"
+                           placeholder="aaaa-mm-dd"
+                           [ngClass]="{'error-field': formSubmitted && (
+                                                                    myForm.get('date_revision')?.errors ||
+                                                                    myForm.get('date_revision')?.errors?.['invalidRevisionDate']) }"
+                           formControlName="date_revision">
+                    @if (formSubmitted && (myForm.get('date_revision')?.errors || myForm.get('date_revision')?.errors?.['invalidRevisionDate'])) {
+                        <small class="text-error mt-1">Fecha de revisión es requerida</small>
+                    }
+                </div>
+            </div>
+            <div class="reg-footer p-2">
+                <div class="rfooter-content m-2">
+                    <button type="button"
+                            class="btn btn-primary mx-1"
+                            [disabled]="disableBtn"
+                            (click)="resetForm()">
+                        Reiniciar
+                    </button>
+                    <button type="button"
+                            class="btn btn-secondary mx-1"
+                            (click)="!idProduct ? createNewProduct() : updateProduct()">
+                        Enviar
+                    </button>
+                </div>
+            </div>
+            <div class="reg-footer p-2">
+                <div class="d-flex">
+                    <button routerLink="/" class="btn btn-primary font-weight-bold">Volver</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

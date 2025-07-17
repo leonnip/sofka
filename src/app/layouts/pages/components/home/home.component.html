@@ -1,0 +1,135 @@
+<app-alert
+    [show]="showAlert"
+    title=""
+    [message]="messageAlert"
+    (confirmed)="actionDeleteProduct()"
+    (cancelled)="showAlert = false">
+</app-alert>
+<div class="wrapper">
+    <div class="home">
+        <div class="home-head">
+            <div class="head-content">
+                <div class="content-left">
+                    <div class="text-group">
+                        <input type="text"
+                               class="text-form"
+                               placeholder="Search..."
+                               (input)="changeTextField($event)">
+                    </div>
+                </div>
+                <div class="content-right">
+                    <button type="button"
+                            routerLink="/register"
+                            class="btn btn-secondary">
+                        Agregar
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="home-body">
+            <div class="content-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="logo">Logo</th>
+                            <th>Nombre del Producto</th>
+                            <th>
+                                <div class="itext">
+                                    <span class="text">Descripción</span>
+                                    <span class="material-icons font-16 icon">info</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="itext">
+                                    Fecha de liberación
+                                    <span class="material-icons font-16 icon">info</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="itext">
+                                    Fecha de reestructuración
+                                    <span class="material-icons font-16 icon">info</span>
+                                </div>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (filteredProducts && filteredProducts.length) {
+                            @for(item of filteredProducts; track filteredProducts) {
+                                <tr>
+                                    <td class="logo">
+                                        <img src="{{ item.logo }}" class="img-logo" alt="logo">
+                                    </td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.description }}</td>
+                                    <td>{{ item.date_release }}</td>
+                                    <td>{{ item.date_revision }}</td>
+                                    <td>
+                                        <!--
+                                        <div class="dropdown">
+                                            <button class="dropbtn">
+                                                <span class="material-icons cursor-pointer"
+                                                      (click)="openDropdown($event)">
+                                                      {{ iconContextual }}
+                                                </span>
+                                            </button>
+                                            <div class="dropdown-content">
+                                                <a class="d-flex align-items-center"
+                                                   routerLink="/register/{{ item.id }}"
+                                                   href="#">
+                                                    <span class="material-icons font-16">edit</span>
+                                                    <span class="px-1">Editar</span>
+                                                </a>
+                                                <a class="d-flex align-items-center"
+                                                   (click)="deleteProduct(item.id, item.name)"
+                                                   href="#">
+                                                    <span class="material-icons font-16">delete</span>
+                                                    <span class="px-1">Eliminar</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        -->
+                                        <!-- Init::Dropdown -->
+                                        <div class="d-flex justify-content-center">
+                                            <app-dropdown
+                                                [opciones]="actions"
+                                                (cambio)="actionSelectDropdown($event, item.id, item.name)">
+                                            </app-dropdown>
+                                        </div>
+                                        <!-- End::Dropdown -->
+                                    </td>
+                                </tr>
+                            }
+                        } @else {
+                            <tr>
+                                <td colspan="6">
+                                    <span class="d-flex justify-content-center">
+                                        No existe productos
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="pt-2 pb-2">
+                            <td class="left" colspan="3">
+                                <span class="font-12">{{ totalProducts }} Resultados</span>
+                            </td>
+                            <td class="right" colspan="3">
+                                <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+                                    @for (size of pageSizeOptions; track pageSizeOptions) {
+                                        <option value="{{ size }}">
+                                            {{ size }}
+                                        </option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

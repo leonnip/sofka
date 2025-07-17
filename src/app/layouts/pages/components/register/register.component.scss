@@ -1,0 +1,29 @@
+.register {
+    width: 700px;
+    border-radius: 5px;
+    .register-content {
+        .reg-head {
+            .title {
+                display: flex;
+                justify-content: center;
+                font-size: 2rem;
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid gray;
+            }
+        }
+        .reg-content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .reg-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+    .text-group {
+        width: 50%;
+        overflow: hidden;
+    }
+}
