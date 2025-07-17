@@ -18,6 +18,7 @@ import {FormsModule} from '@angular/forms';
 })
 export class HomeComponent implements OnInit {
 
+    private searchText: string = "";
     private filter = false;
     public totalProducts: number = 0;
     public products: any;
@@ -67,7 +68,8 @@ export class HomeComponent implements OnInit {
      * @param event
      */
     changeTextField(event: any) {
-        const searchText = event.target.value.toLowerCase();
+        const searchText = event && event.target ? event.target.value.toLowerCase() : event;
+        this.searchText = searchText;
 
         /** Si no hay texto en el campo se muestran todos los productos
          * ------------------------------------------------------------ */
@@ -75,6 +77,7 @@ export class HomeComponent implements OnInit {
             this.filteredProducts = this.products;
             this.totalProducts = this.products.length;
             this.filter = false;
+            this.searchText = '';
             this.onPageSizeChange();
             return;
         }
@@ -135,11 +138,13 @@ export class HomeComponent implements OnInit {
      */
     actionDeleteProduct() {
         this.homeService.deleteProduct(this.indexDelete).subscribe((response: any) => {
-            console.log(response);
             if (response && response.message === "Product removed successfully") {
                 this.homeService.getProducts().subscribe((response: any) => {
+                    console.info('PRODUCTOS RESULTANTES => ', response.data);
                     this.products = response.data;
                     this.filteredProducts = this.products;
+                    this.filteredProductsSearch = this.products;
+                    this.changeTextField(this.searchText);
                     this.onPageSizeChange();
                 })
             }
