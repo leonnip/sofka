@@ -25,7 +25,6 @@ export class RegisterService {
     public checkIdExists(id: any) {
         return this.httpClient.get(this.API_URL + '/bp/products/verification/' + id).pipe(
             map((data: any) => {
-                console.log(data);
                 return data;
             })
         )
@@ -49,7 +48,6 @@ export class RegisterService {
                 date_release: datas.date_release,
                 date_revision: datas.date_revision,
             }).pipe(map((res: any) => {
-                console.log("response create => ", res);
                 return res;
             }),
         );
@@ -84,7 +82,6 @@ export class RegisterService {
                 date_release: datas.date_release,
                 date_revision: datas.date_revision,
             }).pipe(map((res: any) => {
-                console.log("response create => ", res);
                 return res;
             }),
         );
