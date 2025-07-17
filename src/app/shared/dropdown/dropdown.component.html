@@ -1,0 +1,21 @@
+<div class="dropdown">
+    <!-- Botón principal -->
+    <button class="dropdown-btn"
+            (click)="openClose()">
+        <span class="flecha_ material-icons">
+            {{ abierto ? 'more_horiz' : 'more_vert' }}
+        </span>
+    </button>
+
+    <!-- Lista de opciones -->
+    @if (abierto) {
+        <div class="opciones">
+            @for (option of opciones; track opciones) {
+                <div class="opcion"
+                    (click)="selectOption(option)">
+                    {{ option }}
+                </div>
+            }
+        </div>
+    }
+</div>

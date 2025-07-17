@@ -1,0 +1,20 @@
+@if (show) {
+    <div class="overlay" (click)="onCancel()">
+        <div class="alert" (click)="$event.stopPropagation()">
+            <div class="content">
+                <h3>{{ title }}</h3>
+                <p>{{ message }}</p>
+            </div>
+            <div class="buttons">
+                <button class="btn btn-primary font-weight-bold"
+                        (click)="onCancel()">
+                    {{ cancelText }}
+                </button>
+                <button class="btn btn-secondary font-weight-bold"
+                        (click)="onConfirm()">
+                    {{ confirmText }}
+                </button>
+            </div>
+        </div>
+    </div>
+}
