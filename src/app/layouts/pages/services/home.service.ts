@@ -25,12 +25,19 @@ export class HomeService {
     public getProducts() {
         return this.httpClient.get(this.API_URL + '/bp/products').pipe(
             map((res: any) => {
-                console.log("response create => ", res);
                 return res;
             }),
         );
     }
 
+    /**
+     * BORRAR PRODUCTO
+     * ---------------
+     * Borra el producto en el back
+     * y retorna el resultado al usuario
+     * ***********************************
+     * @param idProduct
+     */
     public deleteProduct(idProduct: any) {
         let data = {
             id: idProduct,

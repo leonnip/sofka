@@ -191,7 +191,6 @@ export class RegisterComponent implements OnInit {
         if (this.myForm.valid) {
             this.registerService.setCreateNewProduct(this.myForm.value).subscribe({
                 next: (response: any) => {
-                    console.log('Producto creado exitosamente:', response);
                     this.router.navigate(['/home']);
                 },
                 error: (error: any) => {

@@ -140,7 +140,6 @@ export class HomeComponent implements OnInit {
         this.homeService.deleteProduct(this.indexDelete).subscribe((response: any) => {
             if (response && response.message === "Product removed successfully") {
                 this.homeService.getProducts().subscribe((response: any) => {
-                    console.info('PRODUCTOS RESULTANTES => ', response.data);
                     this.products = response.data;
                     this.filteredProducts = this.products;
                     this.filteredProductsSearch = this.products;
