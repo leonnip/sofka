@@ -49,7 +49,7 @@ export class HandleErrorService {
             }
         }
 
-        console.error('Error en Servicio:', error);
+        //console.error('Error en Servicio:', error);
         return throwError(() => new Error(errorMessage));
     }
 }
