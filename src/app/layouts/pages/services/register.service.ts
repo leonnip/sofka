@@ -1,17 +1,56 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs';
+import {map, Observable, throwError} from 'rxjs';
 import {environment} from '../../../../environments/environment.development';
+import {catchError} from 'rxjs/operators';
+import {HandleErrorService} from './handle-error.service';
+
+/**
+ * Interfaz para definir la estructura completa de un producto
+ */
+export interface Product {
+    id: string;
+    name: string;
+    description: string;
+    logo: string;
+    date_release: string;
+    date_revision: string;
+}
+
+/**
+ * Interfaz para los datos de creación/actualización de producto
+ */
+export interface ProductCreateRequest {
+    id: string;
+    name: string;
+    description: string;
+    logo: string;
+    date_release: string;
+    date_revision: string;
+}
+
+/**
+ * Interfaz para los datos de actualización de producto (sin ID)
+ */
+export interface ProductUpdateRequest {
+    name: string;
+    description: string;
+    logo: string;
+    date_release: string;
+    date_revision: string;
+}
 
 @Injectable({
     providedIn: 'root'
 })
+
 export class RegisterService {
 
     private API_URL = environment.apiUrl;
 
     constructor(
-        private httpClient: HttpClient
+        private httpClient: HttpClient,
+        private handleErrorService: HandleErrorService
     ) { }
 
     /**
@@ -20,13 +59,18 @@ export class RegisterService {
      * Realiza la validación del Id
      * antes que se cree un nuevo producto
      * **************************************
-     * @param id
+     * @param productId
      */
-    public checkIdExists(id: any) {
-        return this.httpClient.get(this.API_URL + '/bp/products/verification/' + id).pipe(
-            map((data: any) => {
-                return data;
-            })
+    public checkIdExists(productId: any) {
+        if (!productId || productId.trim() === '') {
+            return throwError(() => new Error('El ID del producto es requerido para la validación'));
+        }
+
+        return this.httpClient.get(this.API_URL + '/bp/products/verification/' + productId).pipe(
+            map((response: any) => {
+                return response;
+            }),
+            catchError(this.handleErrorService.handleError.bind(this))
         )
     }
 
@@ -37,19 +81,12 @@ export class RegisterService {
      * para crear un nuevo producto con
      * los nuevos datos ingresados por el cliente
      * ********************************************
-     * @param datas
+     * @param productData
      */
-    public setCreateNewProduct(datas: any) {
-        return this.httpClient.post(this.API_URL + '/bp/products', {
-                id: datas.id,
-                name: datas.name,
-                description: datas.description,
-                logo: datas.logo,
-                date_release: datas.date_release,
-                date_revision: datas.date_revision,
-            }).pipe(map((res: any) => {
-                return res;
-            }),
+    public setCreateNewProduct(productData: ProductCreateRequest): Observable<Product> {
+        return this.httpClient.post<Product>(this.API_URL + '/bp/products', productData).pipe(
+            map((response: Product) => response),
+            catchError(this.handleErrorService.handleError.bind(this))
         );
     }
 
@@ -57,12 +94,18 @@ export class RegisterService {
      * DATOS PRODUCTO
      * --------------
      * Retorna los datos del producto
-     * que el usuario a seleccionado
+     * que el usuario ha seleccionado
      * ********************************
-     * @param idProduct
+     * @param productId
      */
-    public getProductSpecific(idProduct: any) {
-        return this.httpClient.get(this.API_URL + '/bp/products/' + idProduct);
+    public getProductSpecific(productId: any): Observable<Product> {
+        if (!productId || productId.trim() === '') {
+            return throwError(() => new Error('El ID del producto es requerido'));
+        }
+
+        return this.httpClient.get<Product>(this.API_URL + '/bp/products/' + productId).pipe(
+            catchError(this.handleErrorService.handleError.bind(this))
+        );
     }
 
     /**
@@ -71,19 +114,13 @@ export class RegisterService {
      * Se actualiza el producto
      * con los nuevos datos ingresados
      * *********************************
-     * @param datas
-     * @param idProduct
+     * @param productData
+     * @param productId
      */
-    public setUpdateProduct(idProduct: any, datas: any) {
-        return this.httpClient.put(this.API_URL + '/bp/products/' + idProduct, {
-                name: datas.name,
-                description: datas.description,
-                logo: datas.logo,
-                date_release: datas.date_release,
-                date_revision: datas.date_revision,
-            }).pipe(map((res: any) => {
-                return res;
-            }),
+    public setUpdateProduct(productId: any, productData: ProductUpdateRequest): Observable<Product> {
+        return this.httpClient.put<Product>(this.API_URL + '/bp/products/' + productId, productData).pipe(
+            map((response: Product) => response),
+            catchError(this.handleErrorService.handleError.bind(this))
         );
     }
 }
