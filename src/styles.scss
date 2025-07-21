@@ -155,28 +155,51 @@ body, html {
 .tooltip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
+    background-color: #dc3545;
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 16px;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .tooltip .tooltiptext {
     visibility: hidden;
-    width: 120px;
-    background-color: black;
+    width: 200px;
+    background-color: #333;
     color: #fff;
     text-align: center;
     border-radius: 6px;
-    padding: 10px;
-
-    /* Position the tooltip */
+    padding: 8px;
     position: absolute;
     z-index: 1;
-    top: 20px;
-    left: 0;
+    bottom: 125%;
+    left: 8%;
+    margin-left: -10px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 8%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
 }
 
 .tooltip:hover .tooltiptext {
     visibility: visible;
+    opacity: 1;
 }
 
 /** SELECT **/
