@@ -72,7 +72,9 @@
                                                                     myForm.get('date_revision')?.errors?.['invalidRevisionDate']) }"
                            formControlName="date_revision">
                     @if (formSubmitted && (myForm.get('date_revision')?.errors || myForm.get('date_revision')?.errors?.['invalidRevisionDate'])) {
-                        <small class="text-error mt-1">Fecha de revisión es requerida</small>
+                        <small class="text-error mt-1">
+                            Fecha de revisión es requerida
+                        </small>
                     }
                 </div>
             </div>
