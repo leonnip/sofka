@@ -12,9 +12,9 @@ describe('HomeComponent', () => {
 
     // Datos de pruebas mock para productos
     const mockProducts = [
-        { id: 1, name: 'Product 1', description: 'Description 1' },
-        { id: 2, name: 'Product 2', description: 'Description 2' },
-        { id: 3, name: 'Test Product', description: 'Test Description' }
+        { id: 'uno', name: 'Product 1', description: 'Description 1', logo: 'logo-uno.png', date_release: '2025-07-17', date_revision: '2026-07-17' },
+        { id: 'dos', name: 'Product 2', description: 'Description 2', logo: 'logo-dos.png', date_release: '2025-07-17', date_revision: '2026-07-17' },
+        { id: 'tres', name: 'Test Product', description: 'Test Description', logo: 'logo-tres.png', date_release: '2025-07-17', date_revision: '2026-07-17' }
     ];
 
     // Configuración que se ejecuta antes de cada prueba
@@ -33,21 +33,25 @@ describe('HomeComponent', () => {
                 { provide: HomeService, useValue: mockHomeService }
             ]
         }).compileComponents();
-    
+
         fixture = TestBed.createComponent(HomeComponent);
         component = fixture.componentInstance;
         homeService = TestBed.inject(HomeService) as jest.Mocked<HomeService>;
         fixture.detectChanges();
     });
 
-    // Pruebas de creación de componente
+    /** Pruebas de creación de componente
+     * ************************************
+     */
     it('Debería crear', () => {
         expect(component).toBeTruthy();
     });
 
-    // Prueba de carga de productos
-    it('Debeería cargar productos al iniciar', () => {
-        homeService.getProducts.mockReturnValue(of({ data: mockProducts }));
+    /** Prueba de carga de productos
+     * *******************************
+     */
+    it('Debería cargar productos al iniciar', () => {
+        (homeService.getProducts as jest.Mock).mockReturnValue(of({ data: mockProducts }));
 
         component.ngOnInit();
 
@@ -66,7 +70,9 @@ describe('HomeComponent', () => {
             component.totalProducts = mockProducts.length;
         });
 
-        // Prueba cuando el texto de búsqueda está vacío
+        /** Prueba cuando el texto de búsqueda está vacío
+         * ************************************************
+         */
         it('Debería mostrar todos los productos cuando el texto de búsqueda esté vacío', () => {
             const event = { target: { value: '' } };
             component.changeTextField(event);
@@ -75,7 +81,9 @@ describe('HomeComponent', () => {
             expect(component.totalProducts).toBe(3);
         });
 
-        // Prueba de filtrado por nombre
+        /** Prueba de filtrado por nombre
+         * ********************************
+         */
         it('Debería filtrar los productos por nombre', () => {
             const event = { target: { value: 'Product 1' } };
             component.changeTextField(event);
@@ -85,7 +93,9 @@ describe('HomeComponent', () => {
             expect(component.totalProducts).toBe(1);
         });
 
-        // Prueba de filtrado por descripción
+        /** Prueba de filtrado por descripción
+         * *************************************
+         */
         it('Debería filtrar los productos por descripción', () => {
             const event = { target: { value: 'test description' } };
             component.changeTextField(event);
@@ -95,9 +105,11 @@ describe('HomeComponent', () => {
             expect(component.totalProducts).toBe(1);
         });
 
-        // Prueba de manejo de valores nulos o indefinidos
+        /** Prueba de manejo de valores nulos o indefinidos
+         * **************************************************
+         */
         it('Debe manejar valores nulos o indefinidos en las propiedades del producto', () => {
-            component.products = [{ id: 1 }]; // Producto sin name ni description
+            component.products = [{ id: 'uno' }]; // Producto sin name ni description
             const event = { target: { value: 'test' } };
             component.changeTextField(event);
 
@@ -108,9 +120,11 @@ describe('HomeComponent', () => {
 
     // Suite de pruebas para la funcionalidad de eliminación
     describe('deleteProduct', () => {
-        // Prueba de configuración del alert de confirmación
+        /** Prueba de configuración del alert de confirmación
+         * ****************************************************
+         */
         it('Debería configurar una alerta para eliminar el producto', () => {
-            const index = 1;
+            const index = 'uno';
             const name = 'Test Product';
 
             component.deleteProduct(index, name);
@@ -125,7 +139,7 @@ describe('HomeComponent', () => {
             it('Debería eliminar el producto cuando se confirme', () => {
                 const mockResponse = { message: "Product removed successfully" };
                 homeService.deleteProduct.mockReturnValue(of(mockResponse));
-                homeService.getProducts.mockReturnValue(of({ data: mockProducts }));
+                (homeService.getProducts as jest.Mock).mockReturnValue(of({ data: mockProducts }));
                 component.indexDelete = 1;
 
                 component.actionDeleteProduct();
