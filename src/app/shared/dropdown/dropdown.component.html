@@ -10,7 +10,7 @@
     <!-- Lista de opciones -->
     @if (abierto) {
         <div class="opciones">
-            @for (option of opciones; track opciones) {
+            @for (option of opciones; track option) {
                 <div class="opcion"
                     (click)="selectOption(option)">
                     {{ option }}
