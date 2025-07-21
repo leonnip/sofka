@@ -1,5 +1,13 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors} from '@angular/forms';
+import {
+    FormBuilder,
+    FormGroup,
+    ReactiveFormsModule,
+    Validators,
+    AbstractControl,
+    ValidationErrors,
+    ValidatorFn
+} from '@angular/forms';
 import {RegisterService} from '../../services/register.service';
 import {Router, RouterLink} from '@angular/router';
 import {NgClass} from '@angular/common';
@@ -40,9 +48,14 @@ export class RegisterComponent implements OnInit {
             description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(200)]],
             logo: ['', Validators.required],
             date_release: ['', [Validators.required, this.dateValidator()]],
-            date_revision: ['', [Validators.required, this.dateRevisionValidator()]],
-        });
+            date_revision: ['', [Validators.required]],
+        }, { validators: this.dateRangeValidator() });
 
+        /** Suscribirse a los cambios de date_release para forzar la revalidación de date_revision
+         * --------------------------------------------------------------------------------------- */
+        this.myForm.get('date_release')?.valueChanges.subscribe(() => {
+            this.myForm.get('date_revision')?.updateValueAndValidity();
+        });
     }
 
     /**
@@ -70,7 +83,7 @@ export class RegisterComponent implements OnInit {
      * -------------
      * Cuando se va a crear un nuevo
      * producto se tiene que validar
-     * que no exista el id ingresado
+     * que no exista el Dd ingresado
      * ********************************
      * @private
      */
@@ -94,8 +107,19 @@ export class RegisterComponent implements OnInit {
      */
     private dateValidator() {
         return (control: any) => {
-            const inputDate = new Date(control.value);
+            // Validar que el control tenga un valor
+            if (!control.value) {
+                return null; // Permitir valores vacíos (usar required por separado si es necesario)
+            }
+
+            // Crear las fechas de forma más segura para evitar problemas de zona horaria
+            const inputDate = new Date(control.value + 'T00:00:00');
             const currentDate = new Date();
+
+            // Verificar que la fecha sea válida
+            if (isNaN(inputDate.getTime())) {
+                return { invalidDate: true };
+            }
 
             /** Establecer las horas, minutos, segundos y
              * milisegundos a 0 para comparar solo las fechas
@@ -103,10 +127,12 @@ export class RegisterComponent implements OnInit {
             inputDate.setHours(0, 0, 0, 0);
             currentDate.setHours(0, 0, 0, 0);
 
+            // La fecha debe ser igual o mayor a la fecha actual
             if (inputDate < currentDate) {
                 return { invalidDate: true };
             }
-            return null;
+
+            return null; // Fecha válida
         };
     }
 
@@ -118,19 +144,17 @@ export class RegisterComponent implements OnInit {
      * de liberación
      * ************************************
      */
-    private dateRevisionValidator() {
-        return (control: any) => {
-            if (!control.parent) {
-                return null;
+    private dateRangeValidator(): ValidatorFn {
+        return (group: AbstractControl): ValidationErrors | null => {
+            const dateReleaseControl = group.get('date_release');
+            const dateRevisionControl = group.get('date_revision');
+
+            if (!dateReleaseControl || !dateRevisionControl || !dateReleaseControl.value || !dateRevisionControl.value) {
+                return null; // Si alguno de los controles no existe o no tiene valor, no validamos aquí
             }
 
-            const dateRelease = control.parent.get('date_release');
-            if (!dateRelease || !dateRelease.value) {
-                return null;
-            }
-
-            const releaseDate = new Date(dateRelease.value);
-            const revisionDate = new Date(control.value);
+            const releaseDate = new Date(dateReleaseControl.value + 'T00:00:00');
+            const revisionDate = new Date(dateRevisionControl.value + 'T00:00:00');
 
             // Establecer las horas a 0 para comparar solo las fechas
             releaseDate.setHours(0, 0, 0, 0);
@@ -141,7 +165,21 @@ export class RegisterComponent implements OnInit {
             expectedDate.setFullYear(releaseDate.getFullYear() + 1);
 
             if (revisionDate.getTime() !== expectedDate.getTime()) {
+                dateRevisionControl.setErrors({ invalidRevisionDate: true });
                 return { invalidRevisionDate: true };
+            } else {
+                // Si la validación pasa, asegúrate de limpiar el error si existía
+                if (dateRevisionControl.hasError('invalidRevisionDate')) {
+                    const errors = dateRevisionControl.errors;
+                    if (errors) {
+                        delete errors['invalidRevisionDate'];
+                        if (Object.keys(errors).length === 0) {
+                            dateRevisionControl.setErrors(null);
+                        } else {
+                            dateRevisionControl.setErrors(errors);
+                        }
+                    }
+                }
             }
 
             return null;
@@ -164,7 +202,10 @@ export class RegisterComponent implements OnInit {
                             logo: response.logo,
                             date_release: response.date_release,
                             date_revision: response.date_revision,
-                        })
+                        });
+                        /** Forzar la revalidación de date_revision después de establecer valores
+                         * ---------------------------------------------------------------------- */
+                        this.myForm.get('date_revision')?.updateValueAndValidity();
                     }
                 }
             );
@@ -236,7 +277,7 @@ export class RegisterComponent implements OnInit {
         Object.keys(this.myForm.controls).forEach(key => {
             const control = this.myForm.get(key);
             if (control) {
-                control.markAsTouched();
+                control?.markAsTouched({ onlySelf: true });
             }
         });
 

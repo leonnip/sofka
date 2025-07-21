@@ -150,5 +150,31 @@ body, html {
     }
 }
 
-/** SELECT CUSTOM **/
+/** TOOLTIP **/
 /** ************************ **/
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+    cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: 20px;
+    left: 0;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
