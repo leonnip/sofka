@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
     ) {
         this.myForm = this.formBuilder.group({
             id: ['', {
-                validators: [Validators.required, Validators.minLength(3), Validators.maxLength(10)],
+                validators: [Validators.required, Validators.minLength(3), Validators.maxLength(10), this.trimValidator()],
                 asyncValidators: [this.idExistsValidator()],
                 updateOn: 'blur'
             }],
@@ -45,6 +45,25 @@ export class RegisterComponent implements OnInit {
 
     }
 
+    /**
+     * QUITAR ESPACIOS
+     * ---------------
+     * Quita los espacios del Id
+     * del producto que se creará
+     * *****************************
+     * @private
+     */
+    private trimValidator() {
+        return (control: AbstractControl): ValidationErrors | null => {
+            if (control.value) {
+                const trimmedValue = control.value.trim();
+                if (control.value !== trimmedValue) {
+                    control.setValue(trimmedValue, { emitEvent: false });
+                }
+            }
+            return null;
+        }
+    }
 
     /**
      * VALIDACIÓN ID

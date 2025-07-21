@@ -94,13 +94,23 @@
         width: 100%;
         overflow: hidden;
         .home-body {
-            width: 1200px;
+            //width: 1200px;
             overflow-x: auto;
             .content-body {
-                width: 1200px;
+                //width: 1200px;
                 overflow-x: auto;
                 table {
                     width: 100%;
+                    thead {
+                        th.desktop {
+                            display: none;
+                        }
+                    }
+                    tbody {
+                        td.desktop {
+                            display: none;
+                        }
+                    }
                 }
             }
         }

@@ -61,12 +61,12 @@ export class RegisterService {
      * **************************************
      * @param productId
      */
-    public checkIdExists(productId: any) {
+    public checkIdExists(productId: string) {
         if (!productId || productId.trim() === '') {
             return throwError(() => new Error('El ID del producto es requerido para la validación'));
         }
 
-        return this.httpClient.get(this.API_URL + '/bp/products/verification/' + productId).pipe(
+        return this.httpClient.get(this.API_URL + '/bp/products/verification/' + productId.trim()).pipe(
             map((response: any) => {
                 return response;
             }),
