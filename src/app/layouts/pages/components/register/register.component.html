@@ -59,7 +59,14 @@
                                                                     myForm.get('date_release')?.errors?.['invalidDate'])}"
                            formControlName="date_release">
                     @if (formSubmitted && (myForm.get('date_release')?.errors || myForm.get('date_release')?.errors?.['invalidDate'])) {
-                        <small class="text-error mt-1">Fecha de liberación es requerida</small>
+                        <small class="text-error mt-1">
+                            <div class="tooltip">i
+                                <small class="tooltiptext">
+                                    La fecha debe ser igual o mayor a la fecha actual.
+                                </small>
+                            </div>
+                            Fecha de liberación incorrecta
+                        </small>
                     }
                 </div>
                 <div class="text-group px-1">
@@ -73,7 +80,12 @@
                            formControlName="date_revision">
                     @if (formSubmitted && (myForm.get('date_revision')?.errors || myForm.get('date_revision')?.errors?.['invalidRevisionDate'])) {
                         <small class="text-error mt-1">
-                            Fecha de revisión es requerida
+                            <div class="tooltip">i
+                                <small class="tooltiptext">
+                                    La fecha debe ser exactamente un año posterior a la fecha de liberación.
+                                </small>
+                            </div>
+                            Fecha de revisión incorrecta
                         </small>
                     }
                 </div>
