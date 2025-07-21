@@ -31,6 +31,10 @@ body, html {
     pointer-events: none !important;
 }
 
+/** COLORES DE TEXTO **/
+/** ************************** **/
+.text-blue { color: #5e72e4 !important; }
+
 /** FLEX **/
 /** ************************** **/
 .d-flex { display: flex; }
@@ -43,9 +47,13 @@ body, html {
 .font-12 { font-size: 12px; }
 .font-14 { font-size: 14px; }
 .font-16 { font-size: 16px; }
+.font-18 { font-size: 18px; }
+.font-20 { font-size: 20px; }
+.font-22 { font-size: 22px; }
 
 /** COLORES DE FONDO **/
 /** ************************** **/
+.bg-none { background: none !important; }
 .bg-white { background: #ffffff; }
 
 /** PADDING **/
@@ -108,6 +116,14 @@ body, html {
         background-color: #fbcf33;
         &:hover {
             background-color: #FBCF3399;
+        }
+    }
+    &.btn-return {
+        background-color: transparent !important;
+        border: 1px solid #fb6340 !important;
+        &:hover {
+            background-color: #fb6340 !important;
+            color: white;
         }
     }
 }

@@ -1,5 +1,9 @@
 <div class="wrapper">
     <div class="register">
+        <div class="d-flex justify-content-center mb-2">
+            <span class="material-icons text-blue">payments</span>
+            <span class="font-16 px-1 font-weight-bold text-blue">BANCO</span>
+        </div>
         <div class="register-content bg-white" [formGroup]="myForm">
             <div class="reg-head">
                 <span class="title">Formulario de Registro</span>
@@ -89,7 +93,9 @@
             </div>
             <div class="reg-footer p-2">
                 <div class="d-flex">
-                    <button routerLink="/" class="btn btn-primary font-weight-bold">Volver</button>
+                    <button routerLink="/" class="btn btn-return font-weight-bold">
+                        Volver
+                    </button>
                 </div>
             </div>
         </div>
