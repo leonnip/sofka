@@ -97,13 +97,15 @@
                                 <span class="font-12">{{ totalProducts }} Resultados</span>
                             </td>
                             <td class="right" colspan="3">
-                                <select [(ngModel)]="pageSize" (change)="onPageSizeChange()">
-                                    @for (size of pageSizeOptions; track size) {
-                                        <option value="{{ size }}">
-                                            {{ size }}
-                                        </option>
-                                    }
-                                </select>
+                                <div class="custom-select">
+                                    <select id="pageSize" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+                                        @for (size of pageSizeOptions; track size) {
+                                            <option value="{{ size }}">
+                                                {{ size }}
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
                             </td>
                         </tr>
                     </tfoot>
